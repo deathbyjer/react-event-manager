@@ -70,7 +70,7 @@ To register and unregister for events, we can make use of the `addEventListener(
 ##### Functional Components
 With functional components, we can make use of the `useEventManager()` hook to grab the event manager we'll be adding / removing events from.
 
-```
+```javascript
 import React, { useState } from 'react'
 import { useEventManager } from '@deathbyjer/react-event-manager'
 
