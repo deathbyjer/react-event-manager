@@ -1,0 +1,30 @@
+{
+  "name": "@deathbyjer/react-event-manager",
+  "version": "0.0.1",
+  "description": "Handle custom events in react and enable components to broadcast and consume dynamic messaging",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deathbyjer/react-event-manager.git"
+  },
+  "keywords": [
+    "react",
+    "event",
+    "event-manager",
+    "manager"
+  ],
+  "author": "Jeremy Linder",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deathbyjer/react-event-manager/issues"
+  },
+  "homepage": "https://github.com/deathbyjer/react-event-manager#readme",
+
+  "dependencies": {
+    "react": "^16.8.0"
+  }
+}
