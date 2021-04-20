@@ -9,11 +9,11 @@ React handles events by sending event listeners, as properties, to child compone
 This can get rather trying if we are pushing down beyond a single level. It is especially difficult if you was completely separate components talking to each other. To handle a situation like that, we need an external error manager.
 
 ### What Makes this EM different from all other EMs?
-This is not the first attempt at a solution to this problem. Here are a couple other solutions:
+This is not the first attempt at a solution to this problem. Here are two other solutions:
  - react-event-listner
  - react-custom-events 
 
-What makes this solution different are a coulpe of key details:
+However, this module has several key differences:
 
 #### This Solution Supports both Class and Functional Components.
 While functional components are all the rage, there are still cases that can be made for class components, specifically if maintaining non-state instance variables are required. This library can easily support both.
