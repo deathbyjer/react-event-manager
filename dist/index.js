@@ -220,12 +220,13 @@ function ensureBoundObject(listeners) {
 }
 
 function bindListeners(event_manager, context, listeners) {
-  var bound_listeners = { manager: event_manager };
+  var bound_listeners = { manager: event_manager, events: {} };
+  var events = bound_listeners.events;
 
   for (var event_type in listeners) {
     var event = ensureBoundObject(listeners[event_type]);
 
-    bound_listeners[event_type] = {};
+    events[event_type] = {};
     var _iteratorNormalCompletion4 = true;
     var _didIteratorError4 = false;
     var _iteratorError4 = undefined;
@@ -234,7 +235,7 @@ function bindListeners(event_manager, context, listeners) {
       for (var _iterator4 = METHOD_TYPES[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
         var method_type = _step4.value;
 
-        bound_listeners[event_type][method_type] = event[method_type].map(function (method) {
+        events[event_type][method_type] = event[method_type].map(function (method) {
           return method.bind(context);
         });
       }
@@ -258,7 +259,7 @@ function bindListeners(event_manager, context, listeners) {
     var _iteratorError5 = undefined;
 
     try {
-      for (var _iterator5 = bound_listeners[event_type].conditions[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+      for (var _iterator5 = events[event_type].conditions[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
         var method = _step5.value;
 
         event_manager.addEventCondition(event_type, method);
@@ -283,7 +284,7 @@ function bindListeners(event_manager, context, listeners) {
     var _iteratorError6 = undefined;
 
     try {
-      for (var _iterator6 = bound_listeners[event_type].listeners[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+      for (var _iterator6 = events[event_type].listeners[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
         var _method = _step6.value;
 
         event_manager.addEventListener(event_type, _method);
@@ -309,14 +310,15 @@ function bindListeners(event_manager, context, listeners) {
 
 function removeBoundListeners(bound_listeners) {
   var event_manager = bound_listeners.manager;
+  var events = bound_listeners.events;
 
-  for (var event_type in bound_listeners) {
+  for (var event_type in events) {
     var _iteratorNormalCompletion7 = true;
     var _didIteratorError7 = false;
     var _iteratorError7 = undefined;
 
     try {
-      for (var _iterator7 = bound_listeners[event_type].conditions[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+      for (var _iterator7 = events[event_type].conditions[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
         var event_condition = _step7.value;
 
         event_manager.removeEventCondition(event_type, event_condition);
@@ -336,14 +338,14 @@ function removeBoundListeners(bound_listeners) {
       }
     }
 
-    bound_listeners[event_type].conditions = 0;
+    events[event_type].conditions = 0;
 
     var _iteratorNormalCompletion8 = true;
     var _didIteratorError8 = false;
     var _iteratorError8 = undefined;
 
     try {
-      for (var _iterator8 = bound_listeners[event_type].listeners[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+      for (var _iterator8 = events[event_type].listeners[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
         var event_listener = _step8.value;
 
         event_manager.removeEventListener(event_type, event_listener);
@@ -363,9 +365,10 @@ function removeBoundListeners(bound_listeners) {
       }
     }
 
-    bound_listeners[event_type].listeners = 0;
-    delete bound_listeners[event_type];
+    events[event_type].listeners = 0;
+    delete events[event_type];
   }
 
+  delete bound_listeners.events;
   delete bound_listeners.manager;
 }

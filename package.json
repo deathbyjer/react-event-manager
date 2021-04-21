@@ -1,6 +1,6 @@
 {
   "name": "@deathbyjer/react-event-manager",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Handle custom events in react and enable components to broadcast and consume dynamic messaging",
   "main": "index.js",
   "scripts": {
@@ -23,8 +23,11 @@
     "url": "https://github.com/deathbyjer/react-event-manager/issues"
   },
   "homepage": "https://github.com/deathbyjer/react-event-manager#readme",
-
   "dependencies": {
     "react": ">=16.8.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1"
   }
 }

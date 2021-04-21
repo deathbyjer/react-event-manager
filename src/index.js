@@ -123,19 +123,20 @@ function ensureBoundObject(listeners) {
 }
 
 export function bindListeners(event_manager, context, listeners) {
-  const bound_listeners = { manager: event_manager }
+  const bound_listeners = { manager: event_manager, events: {} }
+  const events = bound_listeners.events
 
   for (let event_type in listeners) {
     let event = ensureBoundObject(listeners[event_type])
 
-    bound_listeners[event_type] = {}
+    events[event_type] = {}
     for (let method_type of METHOD_TYPES) 
-      bound_listeners[event_type][method_type] = event[method_type].map(method => method.bind(context))
+      events[event_type][method_type] = event[method_type].map(method => method.bind(context))
 
-    for (let method of bound_listeners[event_type].conditions)
+    for (let method of events[event_type].conditions)
       event_manager.addEventCondition(event_type, method)
 
-    for (let method of bound_listeners[event_type].listeners)
+    for (let method of events[event_type].listeners)
       event_manager.addEventListener(event_type, method)    
   }
 
@@ -144,19 +145,21 @@ export function bindListeners(event_manager, context, listeners) {
 
 export function removeBoundListeners(bound_listeners) {
   const event_manager = bound_listeners.manager
+  const events = bound_listeners.events
 
-  for (let event_type in bound_listeners) {
-    for (let event_condition of bound_listeners[event_type].conditions)
+  for (let event_type in events) {
+    for (let event_condition of events[event_type].conditions)
       event_manager.removeEventCondition(event_type, event_condition)
 
-    bound_listeners[event_type].conditions = 0
+    events[event_type].conditions = 0
 
-    for (let event_listener of bound_listeners[event_type].listeners)
+    for (let event_listener of events[event_type].listeners)
       event_manager.removeEventListener(event_type, event_listener)
 
-    bound_listeners[event_type].listeners = 0
-    delete bound_listeners[event_type]
+    events[event_type].listeners = 0
+    delete events[event_type]
   }
   
+  delete bound_listeners.events
   delete bound_listeners.manager
 }
