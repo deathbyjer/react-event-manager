@@ -25,6 +25,6 @@
   "homepage": "https://github.com/deathbyjer/react-event-manager#readme",
 
   "dependencies": {
-    "react": "^16.8.0"
+    "react": ">=16.8.0"
   }
 }
