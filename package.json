@@ -1,6 +1,6 @@
 {
   "name": "@deathbyjer/react-event-manager",
-  "version": "0.0.1.1",
+  "version": "0.0.2",
   "description": "Handle custom events in react and enable components to broadcast and consume dynamic messaging",
   "main": "index.js",
   "scripts": {
