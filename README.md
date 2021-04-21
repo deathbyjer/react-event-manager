@@ -127,7 +127,7 @@ If you've used react-redux before, then should be simple. We can use the functio
 
 ```javascript
 import React from 'react'
-import { connectToEventManager } from '@deathbyjer/react-event-manager`
+import { connectToEventManager } from '@deathbyjer/react-event-manager'
 
 class EventAdder extends React.Component {
   constructor(props) {
@@ -172,7 +172,7 @@ class EventAdder extends React.Component {
   
   componentDidMount() {
     this.bound_listeners = bindListeners(this.props.events, this, {
-      'foo': () => this.setState({foor: 'foo'})
+      'foo': () => this.setState({foor: 'foo'}),
       'bar': [
         () => this.setState({foo: 'bar'}),
         () => console.log("Barred!")
