@@ -163,3 +163,12 @@ export function removeBoundListeners(bound_listeners) {
   delete bound_listeners.events
   delete bound_listeners.manager
 }
+
+export function useBoundListeners(listeners, { context }) {
+  const events = useEventManager()
+  const boundListeners = bindListeners(events, context, listeners)
+
+  useEffect(() => {
+    return () => removeBoundListeners(boundListeners)
+  })
+}
