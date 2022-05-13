@@ -86,7 +86,134 @@ function EventAdder(props) {
   })
 }
 
-export EventAdder
+export default EventAdder
 ```
 
 We add the addEventListener to the manager and then pop the listener off from the manager when the component is being cleaned up (which we have access to using the useEffect hook.
+
+If we are registering more than one event, we also have the option of using the `bindListeners` and `removeBoundListeners` helper functions.
+
+```javascript
+import React, { useState } from 'react'
+import { useEventManager, bindListeners, removeBoundListeners } from '@deathbyjer/react-event-manager'
+
+function EventAdder(props) {
+  const [outside, setOutside] = useState(null)
+  const events = useEventManager()
+
+  const listener = str => setOutside(str)
+  const boundListeners = bindListeners(events, null, {
+    'foo': () => setOutside("foo"),
+    'bar': [
+      () => setOutside("bar"),
+      () => console.log("Easily Removed Later")
+    ]
+  })
+  
+  useEffect(() => {
+    return () => removeBoundListeners(boundListeners)
+  })
+  
+  return <div>{outside}</div>
+}
+
+export default EventAdder
+```
+
+We can also send an array of functions to each event inside the `boundListeners`. This allows us to use multiple smaller, more concise function than a single behemonth that performs a slew of different tasks (while still making cleanup a breeze!)
+
+#### Class Components
+If you've used react-redux before, then should be simple. We can use the function `connectToEventManager` to wrap the component and provide a `this.props.events` attribute that will contain the instance of the event manager for us to add / remove events.
+
+```javascript
+import React from 'react'
+import { connectToEventManager } from '@deathbyjer/react-event-manager'
+
+class EventAdder extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {}
+    
+    this.listener = () => this.setState({foo: "foo"})
+  }
+  
+  componentDidMount() {
+    this.props.events.addEventListener("foo", this.listener)
+  }
+  
+  componentWillUnmount() {
+    this.props.events.removeEventListener("foo", this.listener)
+  }
+  
+  render() {
+    return <div>{this.state.foo}</div>
+  }
+}
+
+export default connectToEventManager(EventAdder)
+```
+
+You'll note that in this example, we specify the event in the `componentDidMount`. That is just because we want to make sure that for every `addEventListener` we have a paired `removeEventListener`. 
+
+And just as before, we can also use the `bindListeners` and `removeBoundListeners` to make our lives a bit easier.
+
+
+
+```javascript
+import React from 'react'
+import { connectToEventManager, bindListeners, removeBoundListeners } from '@deathbyjer/react-event-manager'
+
+class EventAdder extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+  
+  componentDidMount() {
+    this.bound_listeners = bindListeners(this.props.events, this, {
+      'foo': () => this.setState({foor: 'foo'}),
+      'bar': [
+        () => this.setState({foo: 'bar'}),
+        () => console.log("Barred!")
+      ]
+    })
+  }
+  
+  componentWillUnmount() {
+    removeBoundListeners(this.bound_listeners)
+  }
+  
+  render() {
+    return <div>{this.state.foo}</div>
+  }
+}
+
+export default connectToEventManager(EventAdder)
+```
+
+### useEventListeners
+All this is a bunch of boilerplate, so we have added a helper hook to manage the lifecycle of events within a function component.
+
+```javascript
+import React, { useState } from 'react'
+import { useEventListeners } from '@deathbyjer/react-event-manager'
+
+function EventAdder(props) {
+  const [outside, setOutside] = useState(null)
+
+  useEventListeners({
+    'foo': () => setOutside("foo"),
+    'bar': [
+      () => setOutside("bar"),
+      () => console.log("Easily Removed Later")
+    ]
+  })
+  
+  return <div>{outside}</div>
+}
+
+export default EventAdder
+```
+
+You'll still need to use `useEventManager` if you want to dispatch events, though.
