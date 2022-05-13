@@ -164,7 +164,7 @@ export function removeBoundListeners(bound_listeners) {
   delete bound_listeners.manager
 }
 
-export function useBoundListeners(listeners, { context }) {
+export function useEventListeners(listeners, { context }) {
   const events = useEventManager()
   const boundListeners = bindListeners(events, context, listeners)
 
