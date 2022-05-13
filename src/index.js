@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 
 class EventManager {
 
@@ -166,9 +166,9 @@ export function removeBoundListeners(bound_listeners) {
 
 export function useEventListeners(listeners, { context }) {
   const events = useEventManager()
-  const boundListeners = bindListeners(events, context, listeners)
 
   useEffect(() => {
+    const boundListeners = bindListeners(events, context, listeners)
     return () => removeBoundListeners(boundListeners)
   })
 }
